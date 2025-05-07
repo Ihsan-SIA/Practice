@@ -7,9 +7,13 @@ var order = new Order
 orderProcessor.Process(order);
 public class ShippingCalculator
 {
-    public float CalculateShipping(Order order)
+    public float CalculateShippingCost(Order order)
     {
-        return order.TotalPrice;
+        if (order.TotalPrice < 30f)
+        {
+            return order.TotalPrice * 0.1f;
+        }
+        return 0;
     }
 }
 
@@ -39,9 +43,10 @@ public class OrderProcessor
         {
             throw new InvalidOperationException("This order has already been processed, thank you.");
         }
+        
         order.Shipment = new Shipment()
         {
-            Cost = _shippingCalculator.CalculateShipping(order),
+            Cost = _shippingCalculator.CalculateShippingCost(order),
             ShippingDate = DateTime.Today.AddDays(1)
 
         };
